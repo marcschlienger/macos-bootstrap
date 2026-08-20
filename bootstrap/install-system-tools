@@ -28,6 +28,7 @@ formulae=(
 
 casks=(
   bartender
+  cryptomator
   hammerspoon
   kitty
   veracrypt-fuse-t
