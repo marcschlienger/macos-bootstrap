@@ -5,6 +5,8 @@ dotfiles, fonts, command-line tools, development tools, and desktop software.
 The executable shell scripts are the source of truth; no Org-mode tangling or
 generated files are required.
 
+GitHub is the canonical repository. A mirror is maintained on GitLab.
+
 The scripts are designed to be rerunnable. Homebrew skips packages that are
 already installed, existing Git repositories are retained, and existing files
 are not silently overwritten.
@@ -22,7 +24,7 @@ administrator approval itself when macOS requires it.
 ## Quick start
 
 ```sh
-git clone https://codeberg.org/blutlauge/macos-bootstrap.git
+git clone https://github.com/marcschlienger/macos-bootstrap.git
 cd macos-bootstrap
 ./bootstrap/bootstrap
 ```
@@ -47,7 +49,7 @@ Personal settings have sensible defaults and can be overridden for one run:
 ```sh
 GIT_USER_NAME="Your Name" \
 GIT_USER_EMAIL="you@example.com" \
-DOTFILES_REPO="https://codeberg.org/you/dotfiles.git" \
+DOTFILES_REPO="https://github.com/you/dotfiles" \
 ./bootstrap/bootstrap
 ```
 
@@ -58,7 +60,7 @@ Supported variables:
 | `GIT_USER_NAME` | `Marc Schlienger` | Global Git author name |
 | `GIT_USER_EMAIL` | `marc.schlienger@posteo.de` | Global Git author email |
 | `GIT_EDITOR` | `ec` | Global Git editor command |
-| `DOTFILES_REPO` | Codeberg SSH repository | Dotfiles repository |
+| `DOTFILES_REPO` | `https://github.com/marcschlienger/dotfiles` | Dotfiles repository |
 | `DOTFILES_DIR` | `~/.dotfiles` | Dotfiles checkout location |
 | `ZSH_PLUGIN_DIR` | `~/.zsh/plugins` | Zsh plugin directory |
 | `BROWSER_CASK` | `firefox` | Browser installed by the network stage |
@@ -105,9 +107,9 @@ service is unnecessary for this cask.
 
 ### System tools
 
-Installs Cirrus CLI, Tart, rsync, wget, Yazi, full FFmpeg and ImageMagick
-builds, Sevenzip, jq, Poppler, resvg, Bartender, Hammerspoon, kitty, VeraCrypt,
-and Zotero.
+Installs Cirrus CLI, rsync, wget, Yazi, full FFmpeg and ImageMagick builds,
+Sevenzip, jq, Poppler, resvg, Bartender, Hammerspoon, kitty, VeraCrypt, and
+Zotero. Tart remains in the script as a commented-out optional formula.
 
 The stage deliberately makes `ffmpeg-full` and `imagemagick-full` the linked
 command-line variants. This may unlink Homebrew's standard `ffmpeg` and
@@ -135,6 +137,10 @@ getopt, GNU sed, GNU tar, ripgrep, tmux, xz, and zoxide. It also clones:
   Open MPI, ShellCheck, shfmt, and uv
 - installs Oracle JDK by default
 - installs the `llm` and `ruff` Python tools with uv
+
+Docker Desktop remains in the script as a commented-out optional cask because
+its license agreement and privileged configuration require an interactive
+first run.
 
 If the Command Line Tools installer is opened, complete it and rerun the stage.
 

@@ -32,8 +32,13 @@ formulae=(
   uv
 )
 
+development_casks=(
+  "${JDK_CASK:-oracle-jdk}"
+  # docker-desktop # Optional: uncomment to install Docker Desktop.
+)
+
 install_formulae "${formulae[@]}"
-install_casks "${JDK_CASK:-oracle-jdk}"
+install_casks "${development_casks[@]}"
 
 log "Installing Python command-line tools with uv"
 uv tool install --upgrade llm

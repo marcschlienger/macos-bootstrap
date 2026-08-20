@@ -14,7 +14,7 @@ setup_homebrew
 readonly GIT_USER_NAME="${GIT_USER_NAME:-Marc Schlienger}"
 readonly GIT_USER_EMAIL="${GIT_USER_EMAIL:-marc.schlienger@posteo.de}"
 readonly GIT_EDITOR="${GIT_EDITOR:-ec}"
-readonly DOTFILES_REPO="${DOTFILES_REPO:-git@codeberg.org:blutlauge/dotfiles.git}"
+readonly DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/marcschlienger/dotfiles}"
 readonly DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
 
 log "Configuring Git"

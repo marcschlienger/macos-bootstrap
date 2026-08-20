@@ -14,7 +14,7 @@ trust_tap cirruslabs/cli
 
 formulae=(
   cirruslabs/cli/cirrus
-  cirruslabs/cli/tart
+  # cirruslabs/cli/tart # Optional: uncomment to install Tart.
   ffmpeg-full
   imagemagick-full
   jq
