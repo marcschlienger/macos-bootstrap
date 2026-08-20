@@ -27,7 +27,6 @@ formulae=(
 )
 
 casks=(
-  bartender
   cryptomator
   hammerspoon
   kitty
