@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+readonly GIT_USER_NAME="${GIT_USER_NAME:-Marc Schlienger}"
+readonly GIT_USER_EMAIL="${GIT_USER_EMAIL:-marc.schlienger@posteo.de}"
+readonly GIT_EDITOR="${GIT_EDITOR:-ec}"
+readonly DOTFILES_REPO="${DOTFILES_REPO:-git@codeberg.org:blutlauge/dotfiles.git}"
+readonly DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+
+log "Configuring Git"
+git config --global user.name "$GIT_USER_NAME"
+git config --global user.email "$GIT_USER_EMAIL"
+git config --global push.default simple
+git config --global credential.helper osxkeychain
+git config --global core.editor "$GIT_EDITOR"
+
+install_formulae stow
+clone_if_missing "$DOTFILES_REPO" "$DOTFILES_DIR"
+
+if [[ -e "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
+  backup="$HOME/.zshrc.bootstrap-backup-$(date +%Y%m%d-%H%M%S)"
+  log "Moving the existing .zshrc to $backup"
+  mv "$HOME/.zshrc" "$backup"
+fi
+
+log "Linking dotfiles with GNU Stow"
+stow --dir "$DOTFILES_DIR" --target "$HOME" --restow emacs lf tmux zsh

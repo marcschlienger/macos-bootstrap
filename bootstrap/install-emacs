@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+log "Installing Emacs+"
+trust_tap d12frosted/emacs-plus
+install_casks emacs-plus-app
+
+install_formulae \
+  hunspell \
+  python-lsp-server \
+  texlab
+
+readonly SPELLING_DIR="$HOME/Library/Spelling"
+dictionary_tmp="$(mktemp -d)"
+
+cleanup() {
+  rm -rf -- "$dictionary_tmp"
+}
+trap cleanup EXIT
+
+log "Installing English and German Hunspell dictionaries"
+git clone --depth 1 https://github.com/LibreOffice/dictionaries.git "$dictionary_tmp/dictionaries"
+mkdir -p "$SPELLING_DIR"
+
+install -m 0644 "$dictionary_tmp/dictionaries/en/en_GB.aff" "$SPELLING_DIR/en_GB.aff"
+install -m 0644 "$dictionary_tmp/dictionaries/en/en_GB.dic" "$SPELLING_DIR/en_GB.dic"
+install -m 0644 "$dictionary_tmp/dictionaries/en/en_US.aff" "$SPELLING_DIR/en_US.aff"
+install -m 0644 "$dictionary_tmp/dictionaries/en/en_US.dic" "$SPELLING_DIR/en_US.dic"
+install -m 0644 "$dictionary_tmp/dictionaries/de/de_DE_frami.aff" "$SPELLING_DIR/de_DE.aff"
+install -m 0644 "$dictionary_tmp/dictionaries/de/de_DE_frami.dic" "$SPELLING_DIR/de_DE.dic"

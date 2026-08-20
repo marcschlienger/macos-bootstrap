@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+if ! xcode-select --print-path >/dev/null 2>&1; then
+  log "Requesting installation of Apple's Command Line Tools"
+  xcode-select --install || true
+  die "Finish the Command Line Tools installer, then rerun this step."
+fi
+
+formulae=(
+  autoconf
+  automake
+  clang-format
+  cmake
+  flex
+  gdb
+  gettext
+  meson
+  open-mpi
+  shellcheck
+  shfmt
+  uv
+)
+
+install_formulae "${formulae[@]}"
+install_casks "${JDK_CASK:-oracle-jdk}"
+
+log "Installing Python command-line tools with uv"
+uv tool install --upgrade llm
+uv tool install --upgrade ruff

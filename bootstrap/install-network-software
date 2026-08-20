@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+readonly BROWSER_CASK="${BROWSER_CASK:-firefox}"
+
+install_casks \
+  "$BROWSER_CASK" \
+  nextcloud
+
+install_formulae nmap

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+formulae=(
+  btop
+  colordiff
+  eza
+  fastfetch
+  fd
+  findutils
+  fzf
+  gawk
+  gnu-getopt
+  gnu-sed
+  gnu-tar
+  ripgrep
+  tmux
+  xz
+  zoxide
+)
+
+install_formulae "${formulae[@]}"
+
+readonly ZSH_PLUGIN_DIR="${ZSH_PLUGIN_DIR:-$HOME/.zsh/plugins}"
+mkdir -p "$ZSH_PLUGIN_DIR"
+
+clone_if_missing https://github.com/zsh-users/zsh-autosuggestions.git \
+  "$ZSH_PLUGIN_DIR/zsh-autosuggestions"
+clone_if_missing https://github.com/zsh-users/zsh-completions.git \
+  "$ZSH_PLUGIN_DIR/zsh-completions"
+clone_if_missing https://github.com/zsh-users/zsh-syntax-highlighting.git \
+  "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting"

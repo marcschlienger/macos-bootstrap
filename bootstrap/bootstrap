@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+readonly STEPS=(
+  basic-configuration
+  install-fonts
+  install-emacs
+  install-system-tools
+  install-shell-tools
+  install-network-software
+  install-development-software
+  install-desktop-productivity-software
+  install-graphics-software
+)
+
+usage() {
+  cat <<'EOF'
+Usage: ./bootstrap/bootstrap [--list | STEP ...]
+
+Run every bootstrap step, or only the named steps. Do not use sudo.
+
+Options:
+  --list    Print the available step names.
+  -h, --help
+            Show this help text.
+EOF
+}
+
+is_valid_step() {
+  local requested=$1
+  local step
+
+  for step in "${STEPS[@]}"; do
+    [[ "$requested" == "$step" ]] && return 0
+  done
+  return 1
+}
+
+main() {
+  local -a selected_steps
+  local step
+
+  require_macos_user
+
+  case "${1:-}" in
+    --list)
+      printf '%s\n' "${STEPS[@]}"
+      return 0
+      ;;
+    -h | --help)
+      usage
+      return 0
+      ;;
+  esac
+
+  if (($# == 0)); then
+    selected_steps=("${STEPS[@]}")
+  else
+    selected_steps=("$@")
+  fi
+
+  for step in "${selected_steps[@]}"; do
+    is_valid_step "$step" || die "Unknown step '$step'. Run with --list to see valid names."
+  done
+
+  setup_homebrew
+
+  for step in "${selected_steps[@]}"; do
+    log "Running $step"
+    "$SCRIPT_DIR/$step"
+  done
+
+  log "Bootstrap completed"
+}
+
+main "$@"

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+install_casks \
+  libreoffice \
+  libreoffice-language-pack \
+  obsidian
+
+readonly TEXMF_SOURCE="${TEXMF_SOURCE:-$HOME/Nextcloud/cloud.schlienger.xyz/Documents/3-resources/templates/texmf}"
+readonly TEXMF_TARGET="$HOME/Library/texmf"
+
+if [[ -d "$TEXMF_SOURCE" ]]; then
+  mkdir -p "$HOME/Library"
+  ensure_symlink "$TEXMF_SOURCE" "$TEXMF_TARGET"
+else
+  warn "TeX tree not found at $TEXMF_SOURCE; skipping $TEXMF_TARGET link."
+fi

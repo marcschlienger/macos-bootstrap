@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+trust_tap cirruslabs/cli
+
+formulae=(
+  cirruslabs/cli/cirrus
+  cirruslabs/cli/tart
+  ffmpeg-full
+  imagemagick-full
+  jq
+  poppler
+  resvg
+  rsync
+  sevenzip
+  wget
+  yazi
+)
+
+casks=(
+  bartender
+  hammerspoon
+  kitty
+  veracrypt-fuse-t
+  zotero
+)
+
+install_formulae "${formulae[@]}"
+
+# The full variants conflict with Homebrew's standard ffmpeg and ImageMagick
+# links. Make the explicitly requested full builds the command-line defaults.
+brew unlink ffmpeg imagemagick >/dev/null 2>&1 || true
+brew link --overwrite ffmpeg-full imagemagick-full
+
+install_casks "${casks[@]}"
