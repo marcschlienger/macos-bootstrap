@@ -10,6 +10,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 readonly STEPS=(
   basic-configuration
+  configure-macos
   install-fonts
   install-emacs
   install-system-tools

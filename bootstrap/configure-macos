@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=bootstrap/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+
+readonly SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+
+log "Configuring global macOS preferences"
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+log "Configuring Finder preferences"
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+
+log "Configuring screenshot preferences"
+mkdir -p "$SCREENSHOT_DIR"
+defaults write com.apple.screencapture location -string "$SCREENSHOT_DIR"
+defaults write com.apple.screencapture type -string png
+
+log "Restarting Finder to apply its preferences"
+killall Finder >/dev/null 2>&1 || true

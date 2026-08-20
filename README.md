@@ -1,9 +1,9 @@
 # macOS bootstrap
 
-This repository configures a fresh macOS installation with Homebrew, personal
-dotfiles, fonts, command-line tools, development tools, and desktop software.
-The executable shell scripts are the source of truth; no Org-mode tangling or
-generated files are required.
+This repository configures a fresh macOS installation with personal system
+preferences, Homebrew, dotfiles, fonts, command-line tools, development tools,
+and desktop software. The executable shell scripts are the source of truth; no
+Org-mode tangling or generated files are required.
 
 GitHub is the canonical repository. A mirror is maintained on GitLab.
 
@@ -65,6 +65,7 @@ Supported variables:
 | `ZSH_PLUGIN_DIR` | `~/.zsh/plugins` | Zsh plugin directory |
 | `BROWSER_CASK` | `firefox` | Browser installed by the network stage |
 | `JDK_CASK` | `oracle-jdk` | JDK installed by the development stage |
+| `SCREENSHOT_DIR` | `~/Pictures/Screenshots` | Screenshot storage directory |
 | `TEXMF_SOURCE` | Personal Nextcloud TeX tree | Source for `~/Library/texmf` |
 
 For example, install Brave instead of Firefox:
@@ -88,6 +89,17 @@ An existing regular `~/.zshrc` is moved to a timestamped backup before Stow is
 run. An unrelated existing symlink is left for Stow to report rather than being
 silently replaced.
 
+### macOS preferences
+
+- shows all filename extensions and the Finder path bar
+- disables automatic smart-quote and smart-dash substitutions
+- prevents `.DS_Store` files on network volumes
+- saves screenshots as PNG files in `~/Pictures/Screenshots` by default; set
+  `SCREENSHOT_DIR` to use another directory
+
+Finder is restarted after its preferences are written. Other preference changes
+take effect when the affected applications are next opened.
+
 ### Fonts
 
 - Fira Code Nerd Font
@@ -102,8 +114,41 @@ silently replaced.
 - refreshes British English, American English, and German Hunspell dictionaries
   in `~/Library/Spelling`
 
-Emacs Client starts or connects to an Emacs daemon, so a separate Homebrew
-service is unnecessary for this cask.
+Emacs Client connects to an existing Emacs server and automatically starts a
+daemon when necessary, so a separate Homebrew service is unnecessary. Launch
+`Emacs Client.app` from Finder, Spotlight, or the command line:
+
+```sh
+open -a "Emacs Client"
+```
+
+The equivalent terminal command creates a graphical frame and starts a daemon
+when none is running:
+
+```sh
+emacsclient --create-frame --alternate-editor=''
+```
+
+To start the daemon explicitly before opening a client frame, run:
+
+```sh
+emacs --daemon
+emacsclient --create-frame
+```
+
+The installed `emacs-plus-app` cask does not define a Homebrew service, so
+`brew services start emacs-plus-app` is not available. The source-built
+`emacs-plus` formula does define one; after deliberately replacing the cask
+with that formula, it can be started immediately and at login with:
+
+```sh
+brew services start emacs-plus
+```
+
+When using a normally launched `Emacs.app` instead of a daemon, run
+`M-x server-start` inside Emacs before connecting with `emacsclient`. Add
+`(server-start)` to the Emacs configuration to enable that server automatically
+on every normal GUI launch.
 
 ### System tools
 
@@ -175,6 +220,7 @@ Some software is intentionally left outside the automated bootstrap:
 - Running as root is rejected to prevent Homebrew and dotfiles from being
   installed into the root account.
 - Repository clones and symlinks are checked before creation.
+- macOS preference writes are explicit and safe to repeat.
 - Remote downloads use HTTPS and fail on HTTP errors.
 - Third-party Homebrew taps are explicitly trusted before their packages are
   loaded on Homebrew versions that support tap trust.
