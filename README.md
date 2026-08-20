@@ -63,16 +63,9 @@ Supported variables:
 | `DOTFILES_REPO` | `https://github.com/marcschlienger/dotfiles` | Dotfiles repository |
 | `DOTFILES_DIR` | `~/.dotfiles` | Dotfiles checkout location |
 | `ZSH_PLUGIN_DIR` | `~/.zsh/plugins` | Zsh plugin directory |
-| `BROWSER_CASK` | `firefox` | Browser installed by the network stage |
 | `JDK_CASK` | `oracle-jdk` | JDK installed by the development stage |
 | `SCREENSHOT_DIR` | `~/Pictures/Screenshots` | Screenshot storage directory |
 | `TEXMF_SOURCE` | Personal Nextcloud TeX tree | Source for `~/Library/texmf` |
-
-For example, install Brave instead of Firefox:
-
-```sh
-BROWSER_CASK=brave-browser ./bootstrap/bootstrap install-network-software
-```
 
 ## Installation stages
 
@@ -172,7 +165,9 @@ getopt, GNU sed, GNU tar, ripgrep, tmux, xz, and zoxide. It also clones:
 
 ### Network software
 
-- Firefox by default; set `BROWSER_CASK=brave-browser` to use Brave
+- Firefox for everyday browsing
+- Mullvad Browser for privacy-focused, non-persistent browsing; it does not
+  route traffic through the Tor network or include a VPN
 - Nextcloud
 - nmap
 

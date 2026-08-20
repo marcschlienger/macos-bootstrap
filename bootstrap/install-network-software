@@ -11,10 +11,9 @@ source "$SCRIPT_DIR/lib/common.sh"
 require_macos_user
 setup_homebrew
 
-readonly BROWSER_CASK="${BROWSER_CASK:-firefox}"
-
 install_casks \
-  "$BROWSER_CASK" \
+  firefox \
+  mullvad-browser \
   nextcloud
 
 install_formulae nmap
