@@ -1,0 +1,44 @@
+name: Mirror to GitLab
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-to-gitlab
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out all refs
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push branches and tags to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GITLAB_TOKEN}" ]]; then
+            echo "The GITLAB_TOKEN repository secret is not configured." >&2
+            exit 1
+          fi
+
+          git remote add gitlab \
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/marcschlienger/dotfiles.git"
+
+          git push --prune gitlab \
+            '+refs/remotes/origin/*:refs/heads/*'
+          git push --prune gitlab \
+            '+refs/tags/*:refs/tags/*'
