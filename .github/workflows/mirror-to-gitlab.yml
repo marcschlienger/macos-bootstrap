@@ -36,7 +36,7 @@ jobs:
           fi
 
           git remote add gitlab \
-            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/marcschlienger/dotfiles.git"
+            "https://oauth2:${GITLAB_TOKEN}@gitlab.com/marcschlienger/macos-bootstrap.git"
 
           git push --prune gitlab \
             '+refs/remotes/origin/*:refs/heads/*'
