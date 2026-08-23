@@ -10,11 +10,8 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 require_macos_user
 setup_homebrew
-trust_tap cirruslabs/cli
 
 formulae=(
-  cirruslabs/cli/cirrus
-  # cirruslabs/cli/tart # Optional: uncomment to install Tart.
   ffmpeg-full
   imagemagick-full
   jq

@@ -145,10 +145,8 @@ on every normal GUI launch.
 
 ### System tools
 
-Installs Cirrus CLI, rsync, wget, Yazi, full FFmpeg and ImageMagick builds,
-Sevenzip, jq, Poppler, resvg, Cryptomator, Hammerspoon, kitty,
-VeraCrypt, and Zotero. Tart remains in the script as a commented-out optional
-formula.
+Installs rsync, wget, Yazi, full FFmpeg and ImageMagick builds, Sevenzip, jq,
+Poppler, resvg, Cryptomator, Hammerspoon, kitty, VeraCrypt, and Zotero.
 
 The stage deliberately makes `ffmpeg-full` and `imagemagick-full` the linked
 command-line variants. This may unlink Homebrew's standard `ffmpeg` and
