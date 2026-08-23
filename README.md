@@ -64,6 +64,7 @@ Supported variables:
 | `DOTFILES_DIR` | `~/.dotfiles` | Dotfiles checkout location |
 | `ZSH_PLUGIN_DIR` | `~/.zsh/plugins` | Zsh plugin directory |
 | `JDK_CASK` | `oracle-jdk` | JDK installed by the development stage |
+| `COMPUTER_NAME` | `bleu` | Computer and Bonjour host name |
 | `SCREENSHOT_DIR` | `~/Pictures/Screenshots` | Screenshot storage directory |
 | `TEXMF_SOURCE` | Personal Nextcloud TeX tree | Source for `~/Library/texmf` |
 
@@ -84,6 +85,8 @@ silently replaced.
 
 ### macOS preferences
 
+- sets the computer and Bonjour host names to `bleu` by default; set
+  `COMPUTER_NAME` to use another name
 - shows all filename extensions and the Finder path bar
 - disables automatic smart-quote and smart-dash substitutions
 - prevents `.DS_Store` files on network volumes

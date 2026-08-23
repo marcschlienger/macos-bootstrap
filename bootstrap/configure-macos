@@ -11,6 +11,11 @@ source "$SCRIPT_DIR/lib/common.sh"
 require_macos_user
 
 readonly SCREENSHOT_DIR="${SCREENSHOT_DIR:-$HOME/Pictures/Screenshots}"
+readonly COMPUTER_NAME="${COMPUTER_NAME:-bleu}"
+
+log "Setting the computer name to $COMPUTER_NAME"
+sudo scutil --set ComputerName "$COMPUTER_NAME"
+sudo scutil --set LocalHostName "$COMPUTER_NAME"
 
 log "Configuring global macOS preferences"
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
