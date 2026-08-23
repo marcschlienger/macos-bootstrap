@@ -34,4 +34,4 @@ if [[ -e "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
 fi
 
 log "Linking dotfiles with GNU Stow"
-stow --dir "$DOTFILES_DIR" --target "$HOME" --restow emacs lf tmux zsh
+stow --dir "$DOTFILES_DIR" --target "$HOME" --restow emacs kitty tmux zsh
