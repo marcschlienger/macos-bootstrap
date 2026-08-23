@@ -76,8 +76,8 @@ Supported variables:
 - configures the global Git identity, macOS Keychain credential helper, and
   editor
 - installs GNU Stow
-- clones the dotfiles repository and links the `emacs`, `kitty`, `tmux`, and
-  `zsh` packages
+- clones the dotfiles repository and links the `emacs`, `kitty`, `neovim`,
+  `tmux`, and `zsh` packages
 
 An existing regular `~/.zshrc` is moved to a timestamped backup before Stow is
 run. An unrelated existing symlink is left for Stow to report rather than being
@@ -158,7 +158,7 @@ command-line variants. This may unlink Homebrew's standard `ffmpeg` and
 ### Shell tools
 
 Installs btop, colordiff, eza, fastfetch, fd, GNU findutils, fzf, gawk, GNU
-getopt, GNU sed, GNU tar, ripgrep, tmux, xz, and zoxide. It also clones:
+getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and zoxide. It also clones:
 
 - zsh-autosuggestions
 - zsh-completions

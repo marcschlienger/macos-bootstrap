@@ -23,6 +23,7 @@ formulae=(
   gnu-getopt
   gnu-sed
   gnu-tar
+  neovim
   ripgrep
   tmux
   xz
