@@ -12,6 +12,8 @@ require_macos_user
 setup_homebrew
 
 install_casks \
+  chatgpt \
+  claude \
   libreoffice \
   libreoffice-language-pack \
   obsidian

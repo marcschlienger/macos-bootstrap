@@ -188,6 +188,8 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 
 ### Desktop productivity software
 
+- ChatGPT
+- Claude
 - LibreOffice and its language pack
 - Obsidian
 - optionally links a personal TeX tree to `~/Library/texmf`
