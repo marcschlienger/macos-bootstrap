@@ -92,9 +92,14 @@ silently replaced.
 - prevents `.DS_Store` files on network volumes
 - saves screenshots as PNG files in `~/Pictures/Screenshots` by default; set
   `SCREENSHOT_DIR` to use another directory
+- places an automatically hidden, non-magnifying Dock at the bottom with
+  48-point icons and faster reveal animation
+- uses the scale minimize effect, minimizes windows into their application
+  icons, disables launch animation and recent apps, and retains running-app
+  indicators
 
-Finder is restarted after its preferences are written. Other preference changes
-take effect when the affected applications are next opened.
+Finder and the Dock are restarted after their preferences are written. Other
+preference changes take effect when the affected applications are next opened.
 
 ### Fonts
 

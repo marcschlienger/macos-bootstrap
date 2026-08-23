@@ -31,5 +31,24 @@ mkdir -p "$SCREENSHOT_DIR"
 defaults write com.apple.screencapture location -string "$SCREENSHOT_DIR"
 defaults write com.apple.screencapture type -string png
 
+log "Configuring Dock preferences"
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock tilesize -int 48
+defaults write com.apple.dock orientation -string bottom
+defaults write com.apple.dock magnification -bool false
+defaults write com.apple.dock show-recents -bool false
+defaults write com.apple.dock minimize-to-application -bool true
+defaults write com.apple.dock mineffect -string scale
+defaults write com.apple.dock launchanim -bool false
+defaults write com.apple.dock show-process-indicators -bool true
+
+# These private preferences remove the delay and shorten the animation before
+# an automatically hidden Dock appears.
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0.25
+
 log "Restarting Finder to apply its preferences"
 killall Finder >/dev/null 2>&1 || true
+
+log "Restarting the Dock to apply its preferences"
+killall Dock >/dev/null 2>&1 || true
