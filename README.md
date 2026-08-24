@@ -111,9 +111,15 @@ preference changes take effect when the affected applications are next opened.
 
 - taps `d12frosted/emacs-plus`
 - installs the prebuilt `emacs-plus-app` cask, including Emacs Client
-- installs Hunspell, `texlab`, and `python-lsp-server`
+- installs Hunspell and `texlab`
 - refreshes British English, American English, and German Hunspell dictionaries
-  in `~/Library/Spelling`
+  in `~/Library/Spelling`, and verifies that Hunspell discovers `en_US` and
+  `de_DE`
+
+`python-lsp-server` is deliberately not installed: the Python configuration
+uses ty and Ruff instead. Emacs installs `flymake-ruff`, `ruff-format`, and
+`swift-mode` itself. Apple's `/usr/bin/sourcekit-lsp` remains untouched; the
+current lightweight Swift configuration does not use it.
 
 Emacs Client connects to an existing Emacs server and automatically starts a
 daemon when necessary, so a separate Homebrew service is unnecessary. Launch
@@ -181,9 +187,19 @@ getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and zoxide. It also clones:
 
 - checks for Apple's Command Line Tools and opens the installer when necessary
 - installs Autoconf, Automake, clang-format, CMake, Flex, GDB, Gettext, Meson,
-  Open MPI, ShellCheck, shfmt, and uv
+  Lua Language Server, Open MPI, ShellCheck, shfmt, and uv
 - installs Oracle JDK by default
-- installs the `llm` and `ruff` Python tools with uv
+- installs the configured Clojure, Markdown-export, and Org Babel R
+  dependencies: the official Clojure CLI, `clj-kondo`, MultiMarkdown, and R
+- installs the `llm`, `ruff`, and latest `ty` Python tools with uv
+- installs Rust through rustup, selects the stable toolchain, and adds
+  `rust-analyzer`, Rust sources, Clippy, and rustfmt; Cargo is part of that
+  toolchain
+
+The existing Python 3 and clangd installations are retained. The Command Line
+Tools provide the compiler used to build Tree-sitter grammars, and TexLab is
+installed with Emacs. These tools are kept rather than replaced with parallel
+installations.
 
 Docker Desktop remains in the script as a commented-out optional cask because
 its license agreement and privileged configuration require an interactive
@@ -195,6 +211,7 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 
 - ChatGPT
 - Claude
+- Hazel
 - LibreOffice and its language pack
 - Obsidian
 - optionally links a personal TeX tree to `~/Library/texmf`
@@ -211,7 +228,10 @@ never overwritten.
 Some software is intentionally left outside the automated bootstrap:
 
 - Install [MacTeX](https://www.tug.org/mactex/mactex-download.html) with its
-  signed package installer.
+  signed package installer when using the configured LaTeX features; it
+  provides `latexmk` and `pdflatex`.
+- Install full Xcode from the Mac App Store only for Swift development. Emacs
+  remains suitable for lightweight Swift editing without it.
 - Install [Tailscale for macOS](https://pkgs.tailscale.com/stable/#macos) with
   the standalone package when the system-extension version is preferred.
 - Sign in to the Mac App Store and install purchased applications.

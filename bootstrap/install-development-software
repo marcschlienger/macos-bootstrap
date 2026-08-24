@@ -17,16 +17,24 @@ if ! xcode-select --print-path >/dev/null 2>&1; then
   die "Finish the Command Line Tools installer, then rerun this step."
 fi
 
+trust_tap clojure/tools
+trust_tap borkdude/brew
+
 formulae=(
   autoconf
   automake
+  borkdude/brew/clj-kondo
   clang-format
+  clojure/tools/clojure
   cmake
   flex
   gdb
   gettext
+  lua-language-server
   meson
+  multimarkdown
   open-mpi
+  r
   shellcheck
   shfmt
   uv
@@ -37,9 +45,33 @@ development_casks=(
   # docker-desktop # Optional: uncomment to install Docker Desktop.
 )
 
-install_formulae "${formulae[@]}"
 install_casks "${development_casks[@]}"
+install_formulae "${formulae[@]}"
 
 log "Installing Python command-line tools with uv"
 uv tool install --upgrade llm
 uv tool install --upgrade ruff
+uv tool install --upgrade ty@latest
+
+install_rust_toolchain() {
+  local rustup_bin
+
+  if command -v rustup >/dev/null 2>&1; then
+    rustup_bin="$(command -v rustup)"
+  elif [[ -x "$HOME/.cargo/bin/rustup" ]]; then
+    rustup_bin="$HOME/.cargo/bin/rustup"
+  else
+    log "Installing Rust through rustup"
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |
+      sh -s -- -y
+    rustup_bin="$HOME/.cargo/bin/rustup"
+  fi
+
+  [[ -x "$rustup_bin" ]] || die "rustup was installed, but could not be found."
+
+  log "Installing the stable Rust toolchain and editor components"
+  "$rustup_bin" default stable
+  "$rustup_bin" component add rust-analyzer rust-src clippy rustfmt
+}
+
+install_rust_toolchain

@@ -17,7 +17,6 @@ install_casks emacs-plus-app
 
 install_formulae \
   hunspell \
-  python-lsp-server \
   texlab
 
 readonly SPELLING_DIR="$HOME/Library/Spelling"
@@ -38,3 +37,18 @@ install -m 0644 "$dictionary_tmp/dictionaries/en/en_US.aff" "$SPELLING_DIR/en_US
 install -m 0644 "$dictionary_tmp/dictionaries/en/en_US.dic" "$SPELLING_DIR/en_US.dic"
 install -m 0644 "$dictionary_tmp/dictionaries/de/de_DE_frami.aff" "$SPELLING_DIR/de_DE.aff"
 install -m 0644 "$dictionary_tmp/dictionaries/de/de_DE_frami.dic" "$SPELLING_DIR/de_DE.dic"
+
+for dictionary in en_US de_DE; do
+  for extension in aff dic; do
+    dictionary_file="$SPELLING_DIR/$dictionary.$extension"
+    [[ -s "$dictionary_file" ]] || die "Hunspell dictionary file is missing or empty: $dictionary_file"
+  done
+done
+
+hunspell_dictionaries="$(hunspell -D </dev/null 2>&1)"
+for dictionary in en_US de_DE; do
+  grep -q "/$dictionary$" <<<"$hunspell_dictionaries" ||
+    die "Hunspell cannot discover the $dictionary dictionary in $SPELLING_DIR."
+done
+
+log "Verified the en_US and de_DE Hunspell dictionaries"
