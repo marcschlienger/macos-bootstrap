@@ -5,7 +5,7 @@ set -Eeuo pipefail
 IFS=$'\n\t'
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=bootstrap/lib/common.sh
+# shellcheck source=steps/lib/common.sh
 source "$SCRIPT_DIR/lib/common.sh"
 
 require_macos_user

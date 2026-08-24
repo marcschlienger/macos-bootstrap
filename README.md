@@ -26,20 +26,20 @@ administrator approval itself when macOS requires it.
 ```sh
 git clone https://github.com/marcschlienger/macos-bootstrap.git
 cd macos-bootstrap
-./bootstrap/bootstrap
+./bootstrap
 ```
 
-To see or run individual stages:
+To see or run individual steps:
 
 ```sh
-./bootstrap/bootstrap --list
-./bootstrap/bootstrap basic-configuration install-shell-tools
+./bootstrap --list
+./bootstrap basic-configuration install-shell-tools
 ```
 
 Each installer can also be executed directly, for example:
 
 ```sh
-./bootstrap/install-emacs
+./steps/install-emacs
 ```
 
 ## Configuration
@@ -50,7 +50,7 @@ Personal settings have sensible defaults and can be overridden for one run:
 GIT_USER_NAME="Your Name" \
 GIT_USER_EMAIL="you@example.com" \
 DOTFILES_REPO="https://github.com/you/dotfiles" \
-./bootstrap/bootstrap
+./bootstrap
 ```
 
 Supported variables:
@@ -68,7 +68,7 @@ Supported variables:
 | `SCREENSHOT_DIR` | `~/Pictures/Screenshots` | Screenshot storage directory |
 | `TEXMF_SOURCE` | Personal Nextcloud TeX tree | Source for `~/Library/texmf` |
 
-## Installation stages
+## Installation steps
 
 ### Basic configuration
 
@@ -247,7 +247,8 @@ Some software is intentionally left outside the automated bootstrap:
 - Remote downloads use HTTPS and fail on HTTP errors.
 - Third-party Homebrew taps are explicitly trusted before their packages are
   loaded on Homebrew versions that support tap trust.
-- Run `shellcheck bootstrap/* bootstrap/lib/common.sh` after editing scripts.
+- Run `shellcheck bootstrap steps/basic-configuration steps/configure-macos
+  steps/install-* steps/lib/common.sh` after editing scripts.
 
 ## License
 

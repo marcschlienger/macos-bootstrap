@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: BSD-3-Clause
 
+# Shared helpers for the bootstrap steps.
+
 set -Eeuo pipefail
 IFS=$'\n\t'
 
