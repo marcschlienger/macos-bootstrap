@@ -42,6 +42,7 @@ defaults write com.apple.dock minimize-to-application -bool true
 defaults write com.apple.dock mineffect -string scale
 defaults write com.apple.dock launchanim -bool false
 defaults write com.apple.dock show-process-indicators -bool true
+defaults write com.apple.dock mru-spaces -bool false
 
 # These private preferences remove the delay and shorten the animation before
 # an automatically hidden Dock appears.

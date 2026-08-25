@@ -97,6 +97,8 @@ silently replaced.
 - uses the scale minimize effect, minimizes windows into their application
   icons, disables launch animation and recent apps, and retains running-app
   indicators
+- keeps Spaces in their manually arranged order instead of rearranging them by
+  most recent use
 
 Finder and the Dock are restarted after their preferences are written. Other
 preference changes take effect when the affected applications are next opened.
