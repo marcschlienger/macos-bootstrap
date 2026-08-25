@@ -181,6 +181,7 @@ getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and zoxide. It also clones:
 - Mullvad Browser for privacy-focused, non-persistent browsing; it does not
   route traffic through the Tor network or include a VPN
 - Nextcloud
+- Tailscale's standalone macOS app
 - nmap
 
 ### Development software
@@ -238,8 +239,6 @@ Some software is intentionally left outside the automated bootstrap:
   provides `latexmk` and `pdflatex`.
 - Install full Xcode from the Mac App Store only for Swift development. Emacs
   remains suitable for lightweight Swift editing without it.
-- Install [Tailscale for macOS](https://pkgs.tailscale.com/stable/#macos) with
-  the standalone package when the system-extension version is preferred.
 - Sign in to the Mac App Store and install purchased applications.
 
 ## Safety and maintenance
