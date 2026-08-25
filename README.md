@@ -211,6 +211,7 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 
 - ChatGPT
 - Claude
+- CleanShot X
 - Hazel
 - LibreOffice and its language pack
 - Marked 3
