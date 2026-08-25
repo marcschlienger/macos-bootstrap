@@ -213,8 +213,12 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 - Claude
 - Hazel
 - LibreOffice and its language pack
+- Marked 3
 - Obsidian
 - optionally links a personal TeX tree to `~/Library/texmf`
+
+The `marked-app` cask installs Marked's direct-distribution build. Activate or
+restore its direct/Paddle license inside the application.
 
 The TeX link is created only when its source exists, and an existing target is
 never overwritten.

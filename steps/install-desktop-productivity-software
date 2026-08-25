@@ -17,6 +17,7 @@ install_casks \
   hazel \
   libreoffice \
   libreoffice-language-pack \
+  marked-app \
   obsidian
 
 readonly TEXMF_SOURCE="${TEXMF_SOURCE:-$HOME/Nextcloud/cloud.schlienger.xyz/Documents/3-resources/templates/texmf}"
