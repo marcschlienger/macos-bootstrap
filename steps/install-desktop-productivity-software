@@ -12,6 +12,7 @@ require_macos_user
 setup_homebrew
 
 install_casks \
+  alfred \
   chatgpt \
   claude \
   cleanshot \

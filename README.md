@@ -209,6 +209,7 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 
 ### Desktop productivity software
 
+- Alfred
 - ChatGPT
 - Claude
 - CleanShot X
