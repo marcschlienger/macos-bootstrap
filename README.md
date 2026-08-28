@@ -107,6 +107,7 @@ preference changes take effect when the affected applications are next opened.
 
 - Aporetic
 - Fira Code Nerd Font
+- Iosevka Term Nerd Font
 - Linux Libertine
 - Symbols Only Nerd Font
 
@@ -115,8 +116,14 @@ serif-mono. The Emacs configuration prefers it because the faces are matched,
 so `variable-pitch-mode` in Org and Denote buffers reads as one typeface
 rather than a monospaced font paired with an unrelated serif.
 
-Fira Code Nerd Font remains the terminal font. Aporetic carries no Nerd Font
-glyphs, and the terminal should not depend on a fallback chain for them.
+The terminal uses Iosevka Term Nerd Font. Aporetic is itself an Iosevka
+build, so code shares one skeleton across the terminal and Emacs, and the
+Term cut is the terminal-fitted one: ligatures dropped, glyph widths sized to
+the cell. Unlike Aporetic it is Nerd-patched, so no fallback chain is needed
+for the glyphs.
+
+Fira Code Nerd Font is retained as the fallback named in the Emacs font
+candidates.
 
 The Debian bootstrap installs the same fonts from upstream's Git repository,
 which publishes no release archives. The cask is occasionally a version
