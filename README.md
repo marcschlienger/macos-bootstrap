@@ -105,9 +105,22 @@ preference changes take effect when the affected applications are next opened.
 
 ### Fonts
 
+- Aporetic
 - Fira Code Nerd Font
 - Linux Libertine
 - Symbols Only Nerd Font
+
+The Aporetic cask installs all four families: sans, sans-mono, serif, and
+serif-mono. The Emacs configuration prefers it because the faces are matched,
+so `variable-pitch-mode` in Org and Denote buffers reads as one typeface
+rather than a monospaced font paired with an unrelated serif.
+
+Fira Code Nerd Font remains the terminal font. Aporetic carries no Nerd Font
+glyphs, and the terminal should not depend on a fallback chain for them.
+
+The Debian bootstrap installs the same fonts from upstream's Git repository,
+which publishes no release archives. The cask is occasionally a version
+behind that source.
 
 ### Emacs
 
