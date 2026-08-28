@@ -12,6 +12,7 @@ require_macos_user
 setup_homebrew
 
 fonts=(
+  font-aporetic
   font-fira-code-nerd-font
   font-linux-libertine
   font-symbols-only-nerd-font
