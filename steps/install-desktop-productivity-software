@@ -20,7 +20,8 @@ install_casks \
   libreoffice \
   libreoffice-language-pack \
   marked-app \
-  obsidian
+  obsidian \
+  skim
 
 readonly TEXMF_SOURCE="${TEXMF_SOURCE:-$HOME/Nextcloud/cloud.schlienger.xyz/Documents/3-resources/templates/texmf}"
 readonly TEXMF_TARGET="$HOME/Library/texmf"

@@ -243,6 +243,7 @@ If the Command Line Tools installer is opened, complete it and rerun the stage.
 - LibreOffice and its language pack
 - Marked 3
 - Obsidian
+- Skim
 - optionally links a personal TeX tree to `~/Library/texmf`
 
 The `marked-app` cask installs Marked's direct-distribution build. Activate or
