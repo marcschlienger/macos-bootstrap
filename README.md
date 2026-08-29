@@ -214,6 +214,7 @@ getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and zoxide. It also clones:
 - installs Autoconf, Automake, clang-format, CMake, Flex, GDB, Gettext, Meson,
   Lua Language Server, Open MPI, ShellCheck, shfmt, and uv
 - installs Oracle JDK by default
+- installs the full MacTeX distribution, including `latexmk` and `pdflatex`
 - installs the configured Clojure, Markdown-export, and Org Babel R
   dependencies: the official Clojure CLI, `clj-kondo`, MultiMarkdown, and R
 - installs the `llm`, `ruff`, and latest `ty` Python tools with uv
@@ -258,9 +259,6 @@ never overwritten.
 
 Some software is intentionally left outside the automated bootstrap:
 
-- Install [MacTeX](https://www.tug.org/mactex/mactex-download.html) with its
-  signed package installer when using the configured LaTeX features; it
-  provides `latexmk` and `pdflatex`.
 - Install full Xcode from the Mac App Store only for Swift development. Emacs
   remains suitable for lightweight Swift editing without it.
 - Sign in to the Mac App Store and install purchased applications.

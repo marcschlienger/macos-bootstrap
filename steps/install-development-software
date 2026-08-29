@@ -41,6 +41,7 @@ formulae=(
 )
 
 development_casks=(
+  mactex
   "${JDK_CASK:-oracle-jdk}"
   # docker-desktop # Optional: uncomment to install Docker Desktop.
 )
