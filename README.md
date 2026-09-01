@@ -192,8 +192,11 @@ command-line variants. This may unlink Homebrew's standard `ffmpeg` and
 
 ### Shell tools
 
-Installs btop, colordiff, eza, fastfetch, fd, GNU findutils, fzf, gawk, GNU
-getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and zoxide. It also clones:
+Installs btop, colordiff, GNU coreutils, eza, fastfetch, fd, GNU findutils,
+fzf, gawk, GNU getopt, GNU sed, GNU tar, Neovim, ripgrep, tmux, xz, and
+zoxide. Coreutils is what supplies `gls`, which Emacs' Dired needs for
+`--group-directories-first` and ISO timestamps; BSD `ls` supports neither.
+It also clones:
 
 - zsh-autosuggestions
 - zsh-completions
