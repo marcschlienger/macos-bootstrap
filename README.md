@@ -137,8 +137,11 @@ behind that source.
 - installs the prebuilt `emacs-plus-app` cask, including Emacs Client
 - installs Enchant, Hunspell, `pkg-config` and `texlab`. Enchant and
   `pkg-config` are what Jinx, the Emacs spell checker, needs to build its
-  module; Enchant uses Hunspell underneath, so one set of dictionaries
-  serves both
+  module. Note that Homebrew's Enchant ships only the aspell and AppleSpell
+  providers, and AppleSpell covers neither `en_US` nor `de_DE` — so Jinx uses
+  aspell, and the Hunspell dictionaries below serve ispell and the Flyspell
+  fallback instead. Aspell does not decompose German compounds. Verify with
+  `enchant-lsmod-2 -lang de_DE`
 - refreshes British English, American English, and German Hunspell dictionaries
   in `~/Library/Spelling`, and verifies that Hunspell discovers `en_US` and
   `de_DE`

@@ -16,8 +16,14 @@ trust_tap d12frosted/emacs-plus
 install_casks emacs-plus-app
 
 # enchant and pkg-config are for Jinx, the Emacs spell checker: it builds a
-# small C module against libenchant on first use. Enchant speaks to hunspell
-# underneath, so the dictionaries installed below serve both.
+# small C module against libenchant on first use.
+#
+# Enchant dispatches to a provider, and this one ships only aspell and
+# AppleSpell. AppleSpell offers neither en_US nor de_DE, so Jinx gets aspell
+# for both, and the Hunspell dictionaries installed below are used only by
+# ispell and the Flyspell fallback. Aspell's German does not decompose
+# compounds, so words like Hausaufgabenbetreuung are flagged. Check with:
+#   enchant-lsmod-2 -lang de_DE
 install_formulae \
   enchant \
   hunspell \
