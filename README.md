@@ -135,7 +135,10 @@ behind that source.
 
 - taps `d12frosted/emacs-plus`
 - installs the prebuilt `emacs-plus-app` cask, including Emacs Client
-- installs Hunspell and `texlab`
+- installs Enchant, Hunspell, `pkg-config` and `texlab`. Enchant and
+  `pkg-config` are what Jinx, the Emacs spell checker, needs to build its
+  module; Enchant uses Hunspell underneath, so one set of dictionaries
+  serves both
 - refreshes British English, American English, and German Hunspell dictionaries
   in `~/Library/Spelling`, and verifies that Hunspell discovers `en_US` and
   `de_DE`

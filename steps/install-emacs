@@ -15,8 +15,13 @@ log "Installing Emacs+"
 trust_tap d12frosted/emacs-plus
 install_casks emacs-plus-app
 
+# enchant and pkg-config are for Jinx, the Emacs spell checker: it builds a
+# small C module against libenchant on first use. Enchant speaks to hunspell
+# underneath, so the dictionaries installed below serve both.
 install_formulae \
+  enchant \
   hunspell \
+  pkg-config \
   texlab
 
 readonly SPELLING_DIR="$HOME/Library/Spelling"
