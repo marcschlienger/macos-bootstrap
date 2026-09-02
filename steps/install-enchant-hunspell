@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: BSD-3-Clause
+#
+# Give Homebrew's Enchant a Hunspell provider.
+#
+# Jinx spell checks through Enchant, and Enchant dispatches to whichever
+# provider it was built with. Homebrew's bottle is built in a sandbox that
+# exposes only the formula's declared dependencies -- aspell, glib, gettext --
+# so `configure' never sees Hunspell and the provider is simply absent:
+#
+#   /opt/homebrew/lib/enchant-2/enchant_applespell.so
+#   /opt/homebrew/lib/enchant-2/enchant_aspell.so
+#
+# That matters for German. Aspell cannot decompose compounds, so ordinary
+# words are flagged; measured over eighteen everyday school words, aspell
+# accepted 6 and Hunspell accepted 18. Aspell's --run-together recovers 13 but
+# then accepts missing-space typos unless run-together-min is raised.
+#
+# The formula passes no provider flags, so `configure' auto-detects. This
+# script builds the same Enchant version from source with Hunspell visible,
+# and installs only the resulting provider module beside the existing ones.
+#
+# FRAGILE BY CONSTRUCTION: the module lands inside Homebrew's Cellar, so
+# `brew upgrade enchant' removes it and German compounds start being flagged
+# again with no obvious cause. Re-run this script after any Enchant upgrade.
+# Verify at any time with:
+#
+#   enchant-lsmod-2 -lang de_DE     # expect: de_DE (hunspell)
+#
+# English stays on aspell on purpose: Enchant's own ordering file prefers
+# aspell for en_US, en_GB, en_AU and en_CA, and English does not compound.
+#
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=steps/lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+require_macos_user
+setup_homebrew
+
+install_formulae enchant hunspell pkgconf
+
+ENCHANT_PREFIX="$(brew --prefix enchant)"
+MODULE_DIR="$ENCHANT_PREFIX/lib/enchant-2"
+VERSION="$(brew list --versions enchant | awk '{print $2}')"
+[[ -n "$VERSION" ]] || die "Cannot determine the installed Enchant version."
+
+if [[ -f "$MODULE_DIR/enchant_hunspell.so" ]] &&
+   enchant-lsmod-2 -lang de_DE 2>/dev/null | grep -q hunspell; then
+  log "Hunspell provider already present and serving de_DE. Nothing to do."
+else
+  log "Building the Enchant $VERSION Hunspell provider from source"
+
+  BUILD_DIR="$(mktemp -d)"
+  cleanup() { rm -rf -- "$BUILD_DIR"; }
+  trap cleanup EXIT
+
+  TARBALL="enchant-$VERSION.tar.gz"
+  URL="https://github.com/rrthomas/enchant/releases/download/v$VERSION/$TARBALL"
+  curl -fsSL --proto '=https' --tlsv1.2 -o "$BUILD_DIR/$TARBALL" "$URL" ||
+    die "Could not download $URL -- does that release exist?"
+  tar xzf "$BUILD_DIR/$TARBALL" -C "$BUILD_DIR"
+
+  SRC="$BUILD_DIR/enchant-$VERSION"
+  [[ -d "$SRC" ]] || die "Unexpected archive layout in $TARBALL."
+
+  # Hunspell must be visible to pkg-config or configure will skip the provider.
+  HUNSPELL_PC="$(brew --prefix hunspell)/lib/pkgconfig"
+  export PKG_CONFIG_PATH="$HUNSPELL_PC:${PKG_CONFIG_PATH:-}"
+
+  (
+    cd "$SRC"
+    ./configure --prefix="$BUILD_DIR/prefix" --disable-dependency-tracking \
+      >"$BUILD_DIR/configure.log" 2>&1 ||
+      { tail -20 "$BUILD_DIR/configure.log"; die "configure failed."; }
+
+    grep -q 'Providers to build:.*hunspell' "$BUILD_DIR/configure.log" ||
+      die "configure did not detect Hunspell -- is hunspell's .pc file present?"
+
+    # Name the library target explicitly. The default target in lib/ also
+    # renders the manual page with groff, which macOS does not ship, and that
+    # failure would abort the build before the providers are reached. Only
+    # libenchant and the provider modules are wanted here anyway.
+    make -C libgnu    >/dev/null 2>&1
+    make -C lib libenchant-2.la >"$BUILD_DIR/lib.log" 2>&1 || { tail -20 "$BUILD_DIR/lib.log"; die "libenchant failed to build."; }
+    make -C providers >"$BUILD_DIR/providers.log" 2>&1 || { tail -20 "$BUILD_DIR/providers.log"; die "providers failed to build."; }
+  )
+
+  MODULE="$SRC/providers/.libs/enchant_hunspell.so"
+  [[ -f "$MODULE" ]] || die "enchant_hunspell.so was not produced."
+
+  log "Installing the provider into $MODULE_DIR"
+  cp "$MODULE" "$MODULE_DIR/enchant_hunspell.so"
+  chmod u+w "$MODULE_DIR/enchant_hunspell.so"
+
+  # The module was linked against the libenchant just built in the temporary
+  # prefix, which will not exist afterwards. Repoint it at Homebrew's copy --
+  # same version, so the ABI matches -- and re-sign, because editing a binary
+  # invalidates its signature on Apple silicon.
+  BREW_LIB="$(otool -D "$ENCHANT_PREFIX/lib/libenchant-2.2.dylib" | tail -1)"
+  install_name_tool -change "$BUILD_DIR/prefix/lib/libenchant-2.2.dylib" \
+    "$BREW_LIB" "$MODULE_DIR/enchant_hunspell.so"
+  codesign -f -s - "$MODULE_DIR/enchant_hunspell.so" >/dev/null 2>&1 ||
+    warn "codesign failed; the module may not load."
+fi
+
+# The provider looks for dictionaries in ~/.config/enchant/hunspell and the
+# system data dirs -- not in ~/Library/Spelling, where install-emacs puts them.
+log "Linking the Hunspell dictionaries where the provider looks for them"
+DICT_SRC="$HOME/Library/Spelling"
+DICT_DIR="$HOME/.config/enchant/hunspell"
+mkdir -p "$DICT_DIR"
+shopt -s nullglob
+for dictionary in "$DICT_SRC"/*.aff "$DICT_SRC"/*.dic; do
+  ln -sf "$dictionary" "$DICT_DIR/$(basename "$dictionary")"
+done
+shopt -u nullglob
+
+# Prefer Hunspell where Enchant's own ordering does not already have an
+# opinion. The shipped file keeps aspell for the English variants; this only
+# replaces the "*" default.
+ORDERING="$HOME/.config/enchant/enchant.ordering"
+if [[ -f "$ORDERING" ]] && ! grep -q '^\*:' "$ORDERING"; then
+  warn "$ORDERING exists without a '*:' line; leaving it alone."
+else
+  printf '*:hunspell,aspell,applespell\n' >"$ORDERING"
+  log "Wrote $ORDERING"
+fi
+
+log "Verifying"
+provider="$(enchant-lsmod-2 -lang de_DE 2>/dev/null | head -1)"
+printf '  de_DE -> %s\n' "$provider"
+printf '  en_US -> %s\n' "$(enchant-lsmod-2 -lang en_US 2>/dev/null | head -1)"
+grep -q hunspell <<<"$provider" ||
+  die "de_DE is still not served by Hunspell. Check $ORDERING and $DICT_DIR."
+
+log "Done. German compounds will now be accepted; restart Emacs to pick it up."

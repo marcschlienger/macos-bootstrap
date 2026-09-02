@@ -137,14 +137,39 @@ behind that source.
 - installs the prebuilt `emacs-plus-app` cask, including Emacs Client
 - installs Enchant, Hunspell, `pkg-config` and `texlab`. Enchant and
   `pkg-config` are what Jinx, the Emacs spell checker, needs to build its
-  module. Note that Homebrew's Enchant ships only the aspell and AppleSpell
-  providers, and AppleSpell covers neither `en_US` nor `de_DE` — so Jinx uses
-  aspell, and the Hunspell dictionaries below serve ispell and the Flyspell
-  fallback instead. Aspell does not decompose German compounds. Verify with
-  `enchant-lsmod-2 -lang de_DE`
+  module
 - refreshes British English, American English, and German Hunspell dictionaries
   in `~/Library/Spelling`, and verifies that Hunspell discovers `en_US` and
   `de_DE`
+
+Homebrew's Enchant cannot reach those Hunspell dictionaries on its own — see
+the next section.
+
+### Enchant's Hunspell provider
+
+Jinx spell checks through Enchant, and Enchant dispatches to whichever provider
+it was built with. Homebrew's bottle is built in a sandbox exposing only the
+formula's declared dependencies, so it ships `aspell` and `applespell` and no
+Hunspell provider at all. That matters for German: aspell cannot decompose
+compounds. Measured over eighteen everyday school words, aspell accepted 6 and
+Hunspell accepted 18.
+
+`install-enchant-hunspell` rebuilds the same Enchant version from source with
+Hunspell visible to `configure`, installs only the resulting provider module,
+symlinks the dictionaries where the provider looks for them
+(`~/.config/enchant/hunspell`), and prefers Hunspell in
+`~/.config/enchant/enchant.ordering`.
+
+It is fragile by construction: the module lands inside Homebrew's Cellar, so
+`brew upgrade enchant` removes it and German compounds silently start being
+flagged again. Re-run the step after any Enchant upgrade, and verify with:
+
+```sh
+enchant-lsmod-2 -lang de_DE     # expect: de_DE (hunspell)
+```
+
+English stays on aspell deliberately: Enchant's own ordering file prefers aspell
+for `en_US`, `en_GB`, `en_AU` and `en_CA`, and English does not compound.
 
 `python-lsp-server` is deliberately not installed: the Python configuration
 uses ty and Ruff instead. Emacs installs `flymake-ruff`, `ruff-format`, and

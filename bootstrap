@@ -15,6 +15,7 @@ readonly STEPS=(
   configure-macos
   install-fonts
   install-emacs
+  install-enchant-hunspell
   install-system-tools
   install-shell-tools
   install-network-software
