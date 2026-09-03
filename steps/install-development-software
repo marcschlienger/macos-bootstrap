@@ -30,6 +30,8 @@ formulae=(
   flex
   gdb
   gettext
+  go        # gopls execs the go tool at run time; it is not optional for it
+  gopls
   lua-language-server
   meson
   multimarkdown
