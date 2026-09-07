@@ -77,7 +77,7 @@ Supported variables:
   editor
 - installs GNU Stow
 - clones the dotfiles repository and links the `emacs`, `kitty`, `neovim`,
-  `tmux`, and `zsh` packages
+  `kanata`, `tmux`, and `zsh` packages
 
 An existing regular `~/.zshrc` is moved to a timestamped backup before Stow is
 run. An unrelated existing symlink is left for Stow to report rather than being
@@ -215,7 +215,11 @@ on every normal GUI launch.
 ### System tools
 
 Installs rsync, wget, Yazi, full FFmpeg and ImageMagick builds, Sevenzip, jq,
-Poppler, resvg, Cryptomator, Hammerspoon, kitty, VeraCrypt, and Zotero.
+Kanata, Poppler, resvg, Cryptomator, Hammerspoon, kitty, VeraCrypt, and Zotero.
+
+Kanata still needs its macOS virtual-keyboard driver, privacy permissions, and
+root launch services. The complete laptop-keyboard and Keychron QMK procedure
+is in [`KEYBOARDS.md`](KEYBOARDS.md).
 
 The stage deliberately makes `ffmpeg-full` and `imagemagick-full` the linked
 command-line variants. This may unlink Homebrew's standard `ffmpeg` and

@@ -15,6 +15,7 @@ formulae=(
   ffmpeg-full
   imagemagick-full
   jq
+  kanata
   poppler
   resvg
   rsync
