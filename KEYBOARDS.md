@@ -15,7 +15,12 @@ complete bottom-row order:
 
 Kanata leaves the MacBook's Fn key in its physical position and maps the
 available modifier positions to the corresponding Alt, Super, and Control
-order.
+order. To the right of Space, right Command becomes one-shot right Control and
+right Option remains ordinary Option:
+
+    Space  Control  Option
+
+Super/Command remains available on the left side.
 
 The dotfiles repository is the source of the Kanata configuration. The
 personal `qmk` repository is the source of the two QMK keymaps and the factory
