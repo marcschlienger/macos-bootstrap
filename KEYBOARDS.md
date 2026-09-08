@@ -13,10 +13,12 @@ complete bottom-row order:
 
     Alt  Super  Control  Space  Control  Super  Right-Alt  Fn
 
-Kanata leaves the MacBook's Fn key in its physical position and maps the
-available modifier positions to the corresponding Alt, Super, and Control
-order. To the right of Space, right Command becomes one-shot right Control and
-right Option remains ordinary Option:
+Kanata maps the MacBook's function row explicitly: the keys alone provide
+brightness, Mission Control, Spotlight, Dictation, Do Not Disturb, media, and
+volume controls. Holding Fn produces F1--F12, while tapping Fn retains the
+Globe action. It maps the available modifier positions to the corresponding
+Alt, Super, and Control order. To the right of Space, right Command becomes
+one-shot right Control and right Option remains ordinary Option:
 
     Space  Control  Option
 
